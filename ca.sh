@@ -8,5 +8,5 @@ docker \
   -v "${SCRIPT_DIR}/volumes/etc/ssl:/etc/ssl" \
   -v "${SCRIPT_DIR}/volumes/ca:/ca" \
   -v "${SCRIPT_DIR}/volumes/certs:/certs" \
-  ${CA_IMAGE_NAME}:${CA_IMAGE_TAG} \
+  ${CA_IMAGE} \
   $*

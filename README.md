@@ -31,8 +31,7 @@ Create a `.env` file in this directory to override defaults. A `.env-global` fil
 
 | Variable         | Default | Description                              |
 |------------------|---------|------------------------------------------|
-| `CA_IMAGE_NAME`  | —       | Docker image name (used by `ca.sh`)      |
-| `CA_IMAGE_TAG`   | —       | Docker image tag (used by `ca.sh`)       |
+| `CA_IMAGE`       | —       | Docker image (used by `ca.sh`)           |
 | `CA_COMMON_NAME` | `CA`    | Common Name for the CA certificate       |
 | `DAYS`           | `3650`  | Validity period in days (init: 3650, reissue: 365) |
 
