@@ -2,7 +2,7 @@
 FROM eclipse-temurin:17-jdk
 
 # metadata
-LABEL maintainer="you@example.com"
+LABEL maintainer="stefan.dlugolinsky@savba.sk"
 LABEL description="OpenJDK + OpenSSL image (includes keytool and openssl)"
 
 # avoid interactive prompts

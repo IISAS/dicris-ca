@@ -18,7 +18,7 @@ A Docker-based Certificate Authority (CA) using OpenSSL. The CA runs in a contai
 ├── ca-init.sh              # Initialize the CA (generate key + self-signed cert)
 ├── ca-clean.sh             # Reset CA state (removes certs, resets index/serial)
 ├── ca-reissue-cacert.sh    # Reissue the CA certificate using the existing key
-├── envars.sh               # Load .env / .env-global environment files
+├── envvars.sh              # Load .env / .env-global environment files
 └── volumes/
     ├── ca/                 # CA key, certificate, index, and serial files
     ├── certs/              # Issued certificates
@@ -29,11 +29,12 @@ A Docker-based Certificate Authority (CA) using OpenSSL. The CA runs in a contai
 
 Create a `.env` file in this directory to override defaults. A `.env-global` file (if present) takes precedence over `.env`.
 
-| Variable         | Default | Description                              |
-|------------------|---------|------------------------------------------|
-| `CA_IMAGE`       | —       | Docker image (used by `ca.sh`)           |
-| `CA_COMMON_NAME` | `CA`    | Common Name for the CA certificate       |
-| `DAYS`           | `3650`  | Validity period in days (init: 3650, reissue: 365) |
+| Variable         | Default          | Description                                        |
+|------------------|------------------|----------------------------------------------------|
+| `CA_IMAGE`       | `ca:latest`      | Docker image name used by `ca.sh`                  |
+| `CA_COMMON_NAME` | `CA`             | Common Name for the CA certificate                 |
+| `CA_CERT_DAYS`   | `3650`           | Validity period in days for CA init                |
+| `DAYS`           | `365`            | Validity period in days for CA certificate reissue |
 
 ## Usage
 
@@ -48,10 +49,10 @@ Builds the `dicris-ca:latest` image from the local `Dockerfile`.
 ### 2. Initialize the CA
 
 ```bash
-./ca-init.sh [CN]
+./ca-init.sh
 ```
 
-Generates a new RSA 4096-bit private key (`cakey.pem`) and a self-signed CA certificate (`cacert.pem`) valid for 3650 days (10 years). The CN defaults to `$CA_COMMON_NAME` or `CA`.
+Generates a new RSA 4096-bit private key (`cakey.pem`) and a self-signed CA certificate (`cacert.pem`) valid for `CA_CERT_DAYS` days (default: 3650). The CN is taken from `CA_COMMON_NAME` (default: `CA`).
 
 ### 3. Reissue the CA certificate
 
@@ -59,7 +60,7 @@ Generates a new RSA 4096-bit private key (`cakey.pem`) and a self-signed CA cert
 ./ca-reissue-cacert.sh [CN]
 ```
 
-Reissues the CA certificate using the existing private key. The previous `cacert.pem` is backed up with a timestamp suffix before reissue. Validity defaults to 365 days.
+Reissues the CA certificate using the existing private key. The previous `cacert.pem` is backed up with a timestamp suffix before reissue. CN defaults to `$CA_COMMON_NAME`. Validity defaults to `$DAYS` (default: 365).
 
 ### 4. Clean / reset CA state
 
@@ -88,7 +89,7 @@ Runs any command inside the CA container with the volumes mounted:
 ```bash
 # One-time setup
 ./build.sh
-./ca-init.sh "My Root CA"
+./ca-init.sh
 
 # Issue a certificate (example using ca.sh directly)
 ./ca.sh openssl ca -config /etc/ssl/openssl.cnf -in /certs/server.csr -out /certs/server.pem
@@ -98,5 +99,5 @@ Runs any command inside the CA container with the volumes mounted:
 
 # Start over
 ./ca-clean.sh
-./ca-init.sh "My Root CA"
+./ca-init.sh
 ```

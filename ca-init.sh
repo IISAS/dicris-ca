@@ -3,11 +3,13 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "${SCRIPT_DIR}"
 
-. ./envars.sh
+. ./envvars.sh
 
-CA_COMMON_NAME=${CA_COMMON_NAME:-'CA'}
-CN="${1:-$CA_COMMON_NAME}"
-DAYS=${DAYS:-3650}
+CA_HOME="${SCRIPT_DIR}/volumes/ca"
+CA_CERTS="${SCRIPT_DIR}/volumes/certs"
+
+CN="${CA_COMMON_NAME:-'CA'}"
+DAYS=${CA_CERT_DAYS:-3650}
 
 echo "🛈  CN=${CN}"
 echo "🛈  DAYS=${DAYS}"

@@ -3,17 +3,17 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "${SCRIPT_DIR}"
 
-. ./envars.sh
+. ./envvars.sh
 
-CA_COMMON_NAME=${CA_COMMON_NAME:-'CA'}
-CN="${1:-$CA_COMMON_NAME}"
-DAYS="${DAYS:-365}"
+CA_HOME="${SCRIPT_DIR}/volumes/ca"
+CN="${CA_COMMON_NAME:-'CA'}"
+DAYS="${CA_CERT_DAYS:-3650}"
 
 echo "🛈  CN=${CN}"
-echo "🛈  DAYS=${DAYS}"
+echo "🛈  CA_CERT_DAYS=${CA_CERT_DAYS}"
 
 
-cp -v ${SCRIPT_DIR}/volumes/ca/cacert.pem ${SCRIPT_DIR}/volumes/ca/cacert.pem-"$(date '+%Y%m%d-%s')"
+cp -v ${CA_HOME}/cacert.pem ${CA_HOME}/cacert.pem-"$(date '+%Y%m%d-%s')"
 
 ./ca.sh openssl req -x509 \
   -key cakey.pem \
